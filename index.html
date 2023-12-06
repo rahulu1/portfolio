@@ -1,83 +1,37 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta http-equiv="Content-Style-Type" content="text/css">
-    <title></title>
-    <meta name="Generator" content="Cocoa HTML Writer">
-    <meta name="CocoaVersion" content="2487">
-    <style type="text/css">
-    li.li3 {
-        margin: 0.0px 0.0px 0.0px 0.0px;
-        font: 12.0px Times;
-        -webkit-text-stroke: #000000
-    }
-
-    li.li4 {
-        margin: 0.0px 0.0px 0.0px 0.0px;
-        font: 12.0px Times
-    }
-
-    span.s1 {
-        font-kerning: none
-    }
-
-    span.s2 {
-        color: #0000e9;
-        -webkit-text-stroke: 0px #000000
-    }
-
-    span.s3 {
-        text-decoration: underline;
-        font-kerning: none;
-        -webkit-text-stroke: 0px #0000e9
-    }
-
-    span.s4 {
-        font: 12.0px Times;
-        text-decoration: underline;
-        font-kerning: none;
-        color: #0000e9;
-        -webkit-text-stroke: 0px #0000e9
-    }
-
-    ul.ul1 {
-        list-style-type: disc
-    }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px Times; -webkit-text-stroke: #000000">
-        <span class="s1">
-            <b>The Portfolio of Rahul Unniyampath</b>
-        </span>
-    </h1>
-    <h2 style="margin: 0.0px 0.0px 14.9px 0.0px; font: 18.0px Times; -webkit-text-stroke: #000000">
-        <span class="s1">
-            <b>Projects</b>
-        </span>
-    </h2>
-    <ul class="ul1">
-        <li class="li3">
-            <span class="s2">
-                <a href="https://rahulu.itch.io/metroid-nes-unity-remaster">
-                    <span class="s3">Metroid (Unity Remaster):</span>
-                </a>
-            </span>
-            <span class="s1">
-                 My early development on the project focused on recreating the door and camera systems authentically. Specific challenges at this stage included finding a way to mimic the unique resource management system of the original game, wherein out-of-view enemies became inactive, and all rooms besides the current one ceased to run. In the more advanced stages of the project, my contributions were primarily towards the design of the custom mechanic and its ecosystem of related components. I was also the lead techincal artist and implemented all the animations, related state machines, and necessary custom sprites.
-                <br>
+    <div class="container">
+        <div class="about-card">
+            <h2>About Me</h2>
+            <p>Hi! I'm Rahul, and I love everything about game dev. Growing up, I'd always seen tech as the field I wanted to go into. As I got older, I realized that what got me so into tech in the first place were the movies, games, and shows that made computer science and engineering seem like the most magical professions. I realized what I'd really fallen in love with was the art of it all. To me, Game Dev represents the perfect intersection of storytelling and engineering, and that's what I want to do: tell stories. Here are some things I've worked on over the years, and I hope to bring you more in the future!</p>
+        </div>
 
-                Technologies used in the development of this project include C# and Unity for the primary game mechanic recreation and level design. The custom art assets were designed entirely on Pixilart, an online pixel art editing site. My artwork for this project can be found 
-                <a href="https://www.pixilart.com/rahulu/gallery">
-                    <span class="s4">on my profile there.</span>
-                </a>
-            </span>
-        </li>
-        <li class="li4">
-            <a href="https://rahulu.itch.io/tiltshift-knockout">Tiltshift Knockout!:</a>
-             This game was the result of a 2-week rapid prototyping endeavor. My goal with this game was to quickly develop an incredibly powerful modular driving system, and then use that to create a game with arcadey, physics-based combat. The game sees two players compete to be the last one standing by dashing and crashing into each other in an attempt to knock their opponent off the arena. There are two available gamemodes at the moment, and one vehicle class to choose from, with another in development.
-        </li>
-    </ul>
+        <div class="projects">
+            <div class="project-card">
+                <h3>Metroid NES: Unity Remake</h3>
+                <p>A faithful recreation of Brinstar from the original Metroid NES game. Includes a special bonus level with a wholly new weapon, enemies, and puzzles.</p>
+                <a href="project1.html" class="learn-more">Learn More</a>
+            </div>
+            <div class="project-card">
+                <h3>Tiltshift KnockOut!</h3>
+                <p>An exhilirating co-op game in which players hop in vehicles and crash their way to victory.</p>
+                <a href="project2.html" class="learn-more">Learn More</a>
+            </div>
+            <div class="project-card">
+                <h3>Rent-A-Bot</h3>
+                <p>A 2-Player co-op resource managment game where the only guarantees are chaos and collaboration.</p>
+                <a href="project3.html" class="learn-more">Learn More</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer has been removed from here -->
 </body>
 </html>
