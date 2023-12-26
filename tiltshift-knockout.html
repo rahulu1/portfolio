@@ -1,0 +1,265 @@
+<!DOCTYPE HTML>
+<!--
+	Hyperspace by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html lang="en">
+	<head>
+		<title>TiltShift KnockOut!</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="assets/css/main.css" />
+	<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	<link rel="stylesheet" href="prism/prism.css" />
+	<link rel="stylesheet" href="prism/themes/prism-synthwave84.css" />
+	</head>
+	<body class="is-preload">
+	
+	<!-- Sidebar/Header -->
+	<section id="sidebar" class="project-sidebar">
+		<div class="inner">
+			<!-- Main Navigation -->
+			<nav>
+				<ul>
+					<li class="home-button"><a href="index.html"><i class="fa fa-home"></i> Home</a></li>
+					<li><a href="#intro" class="scrolly">Overview</a></li>
+					<li><a href="#one" class="scrolly">Driving System</a></li>
+					<li><a href="#two" class="scrolly">Dynamic Menus</a></li>
+				</ul>
+			</nav>
+		</div>
+	</section>
+
+<!-- Wrapper -->
+<div id="wrapper">
+	<!-- Main -->
+	<section id="main" class="wrapper">
+		<div class="inner">
+			<div class="header-container">
+				<h1 id=>TiltShift KnockOut!</h1>
+				<a href="https://rahulu.itch.io/tiltshift-knockout" class="button itch">Play on Itch.io <i class="fab fa-itch-io"></i></a>
+			</div>
+			
+			<span class="image fit"><img id="title-image" src="images/TSK-1.png" alt="" /></span>
+			<h2 id="intro">Overview</h2>
+			<p>My first full project in Unity, a remake of the original Metroid, was a 2D platformer with simple physics; I went in a totally different direction with my second project, TiltShift KnockOut!. Since I had a lot more creative control, I went out of my comfort zone and made a vehicle-centric 3D party game. TSKO! was primarily a lesson in rapid prototyping, and over the course of this project I learned the technical and mental tools and strategies you need to rapidly develop novel game mechanics. I also learned what it takes to quickly create a fun and functional game loop to show off those novel mechanics.</p>
+			<p>While I didn't achieve <i>all</i> of my goals with TSKO! (chiefly on the visual side of things), I learned how to simplify and reproduce real-world physical systems in a digital environment as I crafted the modular driving systems that powered the game's various vehicles. I also learned some advanced UI/UX design while crafting the menus for TSKO!. Though far from pretty, they're functional and, in certain areas like the start menu, cinematic with their slick camera transitions and interesting composition.</p>
+			<p>What I'm proudest of about this project is how fun and fleshed out the driving system turned out. While it can certainly improve in some areas, I often find myself driving in other video games and thinking to myself that the driving in TSKO! <em>actually</em> feels more fun. I incorporated little details like drift boosts and Ackermann steering to create a semi-realistic but high-momentum driving system that feels responsive and nimble.</p>
+
+			<h2 id="one">Designing a Driving System: Physics and Gameplay Design</h2>
+			<div>
+				<div class="devblock">
+					<span class="image left"><img src="images/TSK-driving.gif" alt="" /></span>
+					<p>A great deal of credit for the driving system lies with Toyful Interactive, the developers of Very Very Valet. I based a lot of the core driving physics off of their driving system.</p>
+					<p>That being said, the actual code and many extra additions to the core driving system were designed and implemented by me; some chief examples include the game's intricate drifting mechanics or the use of a more realistic Ackermann steering system for more accurate, comfortable vehicle handling.</p>
+				</div>
+
+				<h3 onclick="toggleCollapse('drivingImplementation')" style="cursor: pointer;">Implementation <i class="fas fa-plus"></i></h3>
+				<div id="drivingImplementation" class="collapse">
+					<div class="devblock">
+						<p>I opted for a raycast-based approach to simulating wheels, instead of one that utilized actual wheel colliders. The raycast-based approximation of wheels was quicker to implement and more flexible to tinker with. As outlined by Toyful Interactive, implementing a simple driving system comes down to addressing forces exerted on and by the wheel in the x, y, and z directions. These forces determine slip/traction, suspension, and acceleration/friction respectively.</p>
+						<p> Though the implementation is rather simple, there's a lot to break down regarding how each of these forces is handled, so I've divided the explanations and pseudocode for each force into their own sections, which you can read through if you're interested!</p>
+						
+						<h4 onclick="toggleCollapse('suspensionImplementation')" style="cursor: pointer;">Suspension <i class="fas fa-plus"></i></h4>
+						<div id="suspensionImplementation" class="collapse">
+							<p>For suspension, I used a simple spring-damper system. The spring force is calculated by multiplying a spring constant by the difference between the wheel's current position and its rest position. The damper force is calculated by multiplying a damper constant by the wheel's vertical velocity. The total suspension force is the sum of the spring and damper forces. Both constants are unique to the type of car and set through the editor.</p>
+							
+							
+							<pre class="line-numbers codeblock"><!--
+							--><code class="language-csharp"><!--
+							-->void HandleSuspension(RaycastHit tireRay)
+<!--						-->{
+<!--						-->	var coilDirection = _tireTransform.up;
+<!--						-->	var tireWorldVel = _carRigid.GetPointVelocity(_tireTransform.position);
+<!--						-->	var offset = tireRestPos - tireRay.distance;
+<!--						-->	var vel = Vector3.Dot(coilDirection, tireWorldVel);
+<!--						-->	_coilForce = (offset * coilStrength) - (vel * coilDamper);
+								
+<!--						-->	_carRigid.AddForceAtPosition(coilDirection * _coilForce, _tireTransform.position);
+<!--						-->}<!--
+							--></code><!--
+						--></pre>
+						</div>
+
+						<h4 onclick="toggleCollapse('steeringImplementation')" style="cursor: pointer;">Steering <i class="fas fa-plus"></i></h4>
+						<div id="steeringImplementation" class="collapse">
+							<p>The key to steering is counteracting a wheel's desire to slip when it turns. When a wheel changes directions (i.e. turns), inertia will cause it to try and keep moving in its original direction. The tire's grip pushes back on that inertia and keeps the wheel from moving in that original direction, causing the wheel (and the car) to turn. The following code calculates that grip force and applies it to the wheel. The referenced <code class="language-csharp">gripCurve</code> is an animation curve defined in the inspector that determines how much of the wheel's grip applies at its current speed.</p>
+
+							<pre class="line-numbers codeblock"><!--
+							--><code class="language-csharp"><!--
+							-->void HandleSteering()
+<!--						-->{
+<!--						-->	var steeringDirection = _tireTransform.right;
+<!--						-->	var tireWorldVel = _carRigid.GetPointVelocity(_tireTransform.position);
+<!--						-->	var steeringVel = Vector3.Dot(steeringDirection, tireWorldVel);
+<!--						-->	var desiredVelChange = -steeringVel * gripCurve.Evaluate(Mathf.Abs(steeringVel) / tireWorldVel.magnitude);
+<!--						-->	/* handbraking code omitted */						
+<!--						-->	var desiredAccel = desiredVelChange / Time.fixedDeltaTime;
+
+<!--						-->	var steeringForce = _tireMass * desiredAccel * steeringDirection;
+<!--						-->}<!--
+							--></code><!--
+						--></pre>
+						</div>
+
+						<h4 onclick="toggleCollapse('accelerationImplementation')" style="cursor: pointer;">Steering <i class="fas fa-plus"></i></h4>
+						<div id="accelerationImplementation" class="collapse">
+							<p>Acceleration was the simplest of the three forces to implement. The following code applies a force in the direction the wheel is facing, scaled by the car's acceleration factor. The <code class="language-csharp">torqueCurve</code> is an animation curve defined in the inspector that determines how much of the wheel's torque applies at its current speed (normalized based on the car's top speed). This allows for a semi-realistic feel to the acceleration, where it quickly accelerates at low speeds and accelerates slower at high speeds, naturally topping out once the car reaches its top speed.</p>
+
+							<pre class="line-numbers codeblock"><!--
+							--><code class="language-csharp"><!--
+							-->void HandleAcceleration()
+<!--						-->{
+<!--						-->	var accelDirection = _tireTransform.forward;
+<!--						-->	var accelInput = _vertInput;
+<!--						-->	var carSpeed = Vector3.Dot(_carTransform.forward, _carRigid.velocity);
+<!--						-->	var normalizedSpeed = Mathf.Clamp01(Mathf.Abs(carSpeed) / carTopSpeed);
+<!--						-->	var availableTorque = torqueCurve.Evaluate(normalizedSpeed) * accelInput * accelerationFactor;
+<!--						-->	/* drifting code omitted, view below */
+
+<!--						-->	_carRigid.AddForceAtPosition(availableTorque * _tireMass * accelDirection, _tireTransform.position);
+<!--						-->}<!--
+							--></code><!--
+						--></pre>
+						</div>
+					</div>
+
+					<h4>Drifting</h4>
+					<div>
+						<p>Implementing stylized drifting required a more involved, handcrafted approach. First, I added a handbraking system and endlessly tweaked the curves and values related to handbraking in order to achieve the perfect feel. I wanted the cars to be able to pull off donuts at low speeds and wildly swing out and drift at high speeds. I figured a solid handbraking system would be enough for satisfying drifing. Upon testing it out, I found that the drifting, although realistic, felt quite boring. This was because real life drifting doesn't actually let you drive faster; when a car drifts, it overall loses momentum, though years of playing arcadey racing games had led me to the opposite conclusion. I realized then that what the game needed was an arcadey drift that preserved momentum, so I set out to add exactly that.</p>
+
+						<pre class="line-numbers codeblock"><!--
+							--><code class="language-csharp"><!--
+							-->void HandleAcceleration()
+<!--						-->{
+<!--						-->	if (_handbrakeInput)
+<!--						-->		_elapsedDriftTime += Time.fixedDeltaTime;
+<!--						-->	/* normal acceleration code omitted, view above */
+<!--						-->	var availableTorque = torqueCurve.Evaluate(normalizedSpeed) * accelInput * accelerationFactor;
+<!--						-->	if (_handbrakeReleased && !handbrakeable)
+<!--						-->	{
+<!--						-->		availableTorque *= driftBoostMultiplier * Mathf.Clamp01(_elapsedDriftTime / driftBoostMaxTime);
+<!--						-->		_elapsedDriftTime = 0f;
+<!--						-->	}
+
+<!--						-->	_carRigid.AddForceAtPosition(availableTorque * _tireMass * accelDirection, _tireTransform.position);
+<!--						-->}<!--
+							--></code><!--
+						--></pre>
+						
+						<p>As you can see in the code, my approach to creating that arcadey, satisfying drift was to give the player a little boost whenever they released their handbrake (i.e. whenever they stopped drifting). This boost is scaled by the amount of time the player held the handbrake for, so the longer the player drifts, the longer the boost lasts; the main reason it's scaled by time is because the longer one drifts, the more momentum they drain, so a larger boost is needed to bring them back to bring them back to their original momentum. As you might also notice, the boost is applied only to the wheels not affected by the handbrake. That's because those wheels are the ones that can turn and thus dictate the car's direction. Applying the boost to all wheels or even just the wheels affected by the handbrake causes the car to jet off in a direction not intended nor expected by most players.</p>
+					</div>
+				</div>
+			</div>
+
+			<h2 id="two">Dynamic Menus: Using Simple Movement to Make Dynamic UI</h2>
+			<div>
+				<div class="devblock">
+					<span class="image left"><img src="images/TSK-menu.gif" alt="" /></span>
+					<p>Although the project was extremely limited in time and scope, I tried my hand at making some visually interesting UI. Polish plays a big role in how a game is received, and going beyond a typical static start screen was one way I felt I could add some polish to TiltShift KnockOut!.</p>
+					<p>I didn't have the chance to refine the visuals to the level I'd wanted, but I was able to create a strong foundation for the start menu I'd envisioned. Combining a 3D backdrop with a 2D UI, I created a dynamic start menu that rotated through various views as the player(s) progressed from the initial start screen to the game settings screen and finally the car select screen. I primarily used Cinemachine to switch between the various points-of-view, as well as some light scripting to update game settings based on the player's actions in the menus.</p>
+					<p>I synced the motion of the menus to the motion of the camera so as to make everything feel smooth and synced up. Had I had more time to flesh out this part of the project, I'd have filled in the background with more memorable visuals that'd have reflected how far they were into the menus. E.g., when the players are at the game settings screen, I'd have liked to have had a car or two actively being worked on in the background, implicitly signaling to the player they're configuring the gam. Overall, I'm proud that I was able to incorporate some dynamic camera motion and a responsive car select screen within the short timeframe of the project.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+
+<!-- Footer -->
+<footer id="footer" class="wrapper alt">
+	<div class="inner">
+		<ul class="menu">
+			<li>&copy; Untitled. All rights reserved.</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li>
+		</ul>
+	</div>
+</footer>
+
+<!-- Scripts -->
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/jquery.scrollex.min.js"></script>
+	<script src="assets/js/jquery.scrolly.min.js"></script>
+	<script src="assets/js/browser.min.js"></script>
+	<script src="assets/js/breakpoints.min.js"></script>
+	<script src="assets/js/util.js"></script>
+	<script src="assets/js/main.js"></script>
+	<script src="prism/prism.js"></script>
+	<script>
+		function toggleCollapse(collapsibleId) {
+			let content = document.getElementById(collapsibleId);
+			// Assuming this function is always called by clicking on an h2 or h3 that directly encloses the i element
+			let icon = event.currentTarget.querySelector('i');
+
+			if (content.style.display === "block") {
+				content.style.display = "none";
+				if (icon) {
+					icon.classList.remove('fa-minus');
+					icon.classList.add('fa-plus');
+				}
+			} else {
+				content.style.display = "block";
+				if (icon) {
+					icon.classList.remove('fa-plus');
+					icon.classList.add('fa-minus');
+				}
+			}
+			Prism.highlightAll();
+		}
+	</script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			let collapsibleTriggers = document.querySelectorAll('.collapsible-trigger');
+
+			collapsibleTriggers.forEach(function(trigger) {
+				// Set the initial state correctly
+				let content = trigger.nextElementSibling;
+				while(content && !content.classList.contains('collapsible-content')) {
+					content = content.nextElementSibling;
+				}
+				if (content) {
+					content.style.maxHeight = content.classList.contains('active') ? `${content.scrollHeight}px` : "0px";
+				}
+
+				trigger.addEventListener('click', function() {
+					// Toggle the content
+					content = this.nextElementSibling;
+					while(content && !content.classList.contains('collapsible-content')) {
+						content = content.nextElementSibling;
+					}
+					if (content) {
+						content.classList.toggle('active');
+						content.style.maxHeight = content.classList.contains('active') ? `${content.scrollHeight}px` : "0px";
+
+						// Toggle the caret icon
+						let icon = this.querySelector('.fa');
+						if (icon) {
+							icon.classList.toggle('fa-caret-down');
+							icon.classList.toggle('fa-caret-up'); // Assuming you have a 'fa-caret-up' class for the upward caret
+						}
+					}
+				});
+			});
+		});
+	</script>
+
+	<script>
+		// Array of images you want to rotate
+		const images = [
+			'images/TSK-1.png',
+			'images/TSK-2.png',
+			'images/TSK-3.png',
+		];
+		// Current index of the images array
+		let currentIndex = 0;
+
+		// Function to rotate images
+		function rotateImage() {
+			currentIndex = (currentIndex + 1) % images.length; // Increment the index and loop back to 0 if it reaches the end
+			document.getElementById('title-image').src = images[currentIndex]; // Change the image source
+		}
+
+		// Set the interval to change the image every 4 seconds (4000 milliseconds)
+		setInterval(rotateImage, 4000);
+	</script>
+</body>
+</html>

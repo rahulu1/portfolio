@@ -1,0 +1,167 @@
+<!DOCTYPE HTML>
+<!--
+	Hyperspace by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html lang="en">
+	<head>
+		<title>Metroid NES - Unity Remake</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<link rel="stylesheet" href="prism/prism.css" />
+		<link rel="stylesheet" href="prism/themes/prism-synthwave84.css" />
+	</head>
+	<body class="is-preload">
+	
+	<!-- Sidebar/Header -->
+	<section id="sidebar" class="project-sidebar">
+		<div class="inner">
+			<!-- Main Navigation -->
+			<nav>
+				<ul>
+					<li class="home-button"><a href="index.html"><i class="fa fa-home"></i> Home</a></li>
+					<li><a href="#intro" class="scrolly">Overview</a></li>
+					<li><a href="#one" class="scrolly">The Beamerang</a></li>
+				</ul>
+			</nav>
+		</div>
+	</section>
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<section id="main" class="wrapper">
+						<div class="inner">
+							<div class="header-container">
+								<h1 id=>Metroid NES - Unity Remake</h1>
+								<a href="https://rahulu.itch.io/metroid-nes-unity-remaster" class="button itch">Play on Itch.io <i class="fab fa-itch-io"></i></a>
+							</div>
+							<span class="image NES"><img id="title-image-NES" src="images/metroid-title-1.png" alt=""/></span>
+							<h2 id="intro">Overview</h2>
+							<p>My first full project as a game developer was this very Unity remake of the original Metroid NES. This entire project lasted three weeks from start to finish, and during that span of time my partner and I created a near pixel-perfect recreation of the first third of the original game, complete with accurate animations, power ups, and enemy AI.</p>
+							<p>Though recreating a section of the original game was in and of itself an excellent lesson in game development, the second part of the project, wherein we added a whole new mechanic and level centred around said mechanic, let us truly hone our game design chops. For our custom level and mechanic, we gave Samus a new weapon/tool, the Beamerang. The Beamerang is a projectile Samus can fire, recall, and even directly control the movements of. Inspired by games like God of War and Arkham Asylum, we worked to make the Beamerange more than just a weapon; the new tool is central to many puzzles in the new level, as well as the only thing that can defeat the brand-new enemy we introduced, the Kaskas.</p>
+
+							<h2 id="one">The Beamerang: Designing a New Weapon</h2>
+							<div>
+								<div class="devblock">
+									<span class="image left"><img src="images/acquire-beamerang.gif" alt=""/></span>
+									<p>When trying to figure out a novel mechanic to add to our remake of Metroid, I started out by thinking about what the game lacked in the first place. Though old, it's a pretty fun game with action that holds up surprisingly well. The movement mechanics and lack of puzzles were the only things I felt made it feel a bit dated. Our initial idea was for a dash-type attack that'd allow the player to tackle enemies in a new way and allow us as developers to build unique levels that require the dash to complete. This went out the window once we'd realized that a similar mechanic existed in later games in the Metroid serires.</p>
+									<p>I went back to the drawing board and tried to think of another new mechanic that might add combat and puzzle mechanics to the game. Looking to my favorite games for inspiration, the Remote Batarang from the Arkham Series caught my eye. This gadget is a twist on Batman's typical Batarang that allows the player to manually control the movement of the gadget for a limited amount of time. This alos brought to mind Kratos' axe from the newer God of War games; that weapon has such a distinct, snappy feel, and makes combat far more exciting and dynamic with it's recall ability.</p>
+								</div>
+
+								<div class="devblock">
+									<span class="image right"><img src="images/pointer-beamerang.gif" alt=""/></span>
+									<p>Drawing inspiration from these two ideas, I created the Beamerang in one passion-fueled night. Much like Kratos' axe, the player can shoot the Beamerang and leave it in place until they choose to recall it, at which point it comes flying back to the player, dealing damage to anything in its path. Additionally, more in the vein of the Remote Batarang, we gave it a secondary type of recall wherein the player can actually directly control the movement of the Beamerang using an onscreen pointer, allowing for more precise movement necessary to solve some puzzles. These two different types of recall were designed to support a variety of combat and puzzle scenarios.</p>
+								</div>
+
+								<div class="devblock">
+									<span class="image left"><img src="images/kaskas-beamerang.gif" alt=""/></span>
+									<p>I didn't want the Beamerang to feel like a one note tool. Although it had its unique uses in puzzles, we wanted it to stand out as a weapon too. After a quick brainstorm sesh, a rough sketch in a notebook of mine, and 15 minutes on Pixilart, I'd come up with the Kaskas. Reminiscent of the Boos from the Mario games, these creatures chase the player relentlessly if they're within range. Protected at their front with tough armor, the only way to damage a Kaskas is by attacking their exposed back of their cranium. For this, the players must utilize the Beamerang, as it's the only weapon the player can use to target the back of the Kaskas while the enemy faces them.</p>
+								</div>
+							</div>
+						</div>
+					</section>
+
+			</div>
+
+		<!-- Footer -->
+			<footer id="footer" class="wrapper alt">
+				<div class="inner">
+					<ul class="menu">
+						<li>&copy; Untitled. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+					</ul>
+				</div>
+			</footer>
+
+		<!-- Scripts -->
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/jquery.scrollex.min.js"></script>
+	<script src="assets/js/jquery.scrolly.min.js"></script>
+	<script src="assets/js/browser.min.js"></script>
+	<script src="assets/js/breakpoints.min.js"></script>
+	<script src="assets/js/util.js"></script>
+	<script src="assets/js/main.js"></script>
+	<script src="prism/prism.js"></script>
+	<script>
+		function toggleCollapse(collapsibleId) {
+			let content = document.getElementById(collapsibleId);
+			// Assuming this function is always called by clicking on an h2 or h3 that directly encloses the i element
+			let icon = event.currentTarget.querySelector('i');
+
+			if (content.style.display === "block") {
+				content.style.display = "none";
+				if (icon) {
+					icon.classList.remove('fa-minus');
+					icon.classList.add('fa-plus');
+				}
+			} else {
+				content.style.display = "block";
+				if (icon) {
+					icon.classList.remove('fa-plus');
+					icon.classList.add('fa-minus');
+				}
+			}
+			Prism.highlightAll();
+		}
+	</script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			let collapsibleTriggers = document.querySelectorAll('.collapsible-trigger');
+
+			collapsibleTriggers.forEach(function(trigger) {
+				// Set the initial state correctly
+				let content = trigger.nextElementSibling;
+				while(content && !content.classList.contains('collapsible-content')) {
+					content = content.nextElementSibling;
+				}
+				if (content) {
+					content.style.maxHeight = content.classList.contains('active') ? `${content.scrollHeight}px` : "0px";
+				}
+
+				trigger.addEventListener('click', function() {
+					// Toggle the content
+					content = this.nextElementSibling;
+					while(content && !content.classList.contains('collapsible-content')) {
+						content = content.nextElementSibling;
+					}
+					if (content) {
+						content.classList.toggle('active');
+						content.style.maxHeight = content.classList.contains('active') ? `${content.scrollHeight}px` : "0px";
+
+						// Toggle the caret icon
+						let icon = this.querySelector('.fa');
+						if (icon) {
+							icon.classList.toggle('fa-caret-down');
+							icon.classList.toggle('fa-caret-up'); // Assuming you have a 'fa-caret-up' class for the upward caret
+						}
+					}
+				});
+			});
+		});
+	</script>
+
+	<script>
+		// Array of images you want to rotate
+		const images = [
+			'images/metroid-title-1.png',
+			'images/metroid-title-2.png',
+			'images/metroid-title-3.png',
+		];
+		// Current index of the images array
+		let currentIndex = 0;
+
+		// Function to rotate images
+		function rotateImage() {
+			currentIndex = (currentIndex + 1) % images.length; // Increment the index and loop back to 0 if it reaches the end
+			document.getElementById('title-image-NES').src = images[currentIndex]; // Change the image source
+		}
+
+		// Set the interval to change the image every 4.5 seconds (4500 milliseconds)
+		setInterval(rotateImage, 4500);
+	</script>
+	</body>
+</html>

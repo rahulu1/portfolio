@@ -1,0 +1,293 @@
+<!DOCTYPE HTML>
+<!--
+	Hyperspace by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html lang="en">
+	<head>
+		<title>Rent-A-Bot</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<link rel="stylesheet" href="prism/prism.css" />
+		<link rel="stylesheet" href="prism/themes/prism-synthwave84.css" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Sidebar/Header -->
+		<section id="sidebar" class="project-sidebar">
+			<div class="inner">
+				<!-- Main Navigation -->
+				<nav>
+					<ul>
+						<li class="home-button"><a href="index.html"><i class="fa fa-home"></i> Home</a></li>
+						<li><a href="#intro" class="scrolly">Overview</a></li>
+						<li><a href="#one" class="scrolly">Crafting</a></li>
+						<li><a href="#two" class="scrolly">Quick Time Events</a></li>
+						<li><a href="#three" class="scrolly">Game Art</a></li>
+					</ul>
+				</nav>
+			</div>
+		</section>
+
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+				<!-- Main -->
+					<section id="main" class="wrapper">
+						<div class="inner project">
+							<div class="header-container">
+								<h1 id=>Rent-A-Bot: Co-op Robot Chaos</h1>
+								<a href="https://bossmanstudios.itch.io/rent-a-bot" class="button itch">View on Itch.io <i class="fab fa-itch-io"></i></a>
+							</div>
+
+							<span class="image fit"><img id="title-image" src="images/rent-a-bot-1.png" alt="" /></span>
+							<h2 id="intro">Overview</h2>
+							<p>Rent-A-Bot takes a playful approach to the co-op party game format, drawing inspiration from the teamwork-centric gameplay of titles like Overcooked. Players work in tandem as robots, navigating the intricacies of factory work to hit production targets. The game's level design cleverly necessitates collaboration, with each player controlling distinct aspects of the resource and manufacturing process.</p>
+
+							<div class="devblock">
+								<span class="image right"><img src="https://cdn.discordapp.com/attachments/1166079627324825684/1181792302050586755/Rent-A-Bot-Gif.gif" alt="" /></span>
+								<p>What truly distinguishes Rent-A-Bot is its dynamic disaster management. Rather than focusing solely on production, players are thrust into a chaotic world of sudden power outages, conveyor belt malfunctions, and pipe bursts, turning crisis management into the heart of the gameplay. These elements evolve with each level, escalating in complexity and injecting a thrilling unpredictability into the core experience.</p>
+							</div>
+							
+							<h2 id="one">Adding Crafting: Designing Flexible Features</h2>
+							<div>
+								<div class="devblock">
+									<span class="image left"><img src="images/rent-a-bot-crafting.gif" alt="" /></span>
+									<p>Early drafts of Rent-A-Bot included a simple crafting system that was at the core of the gameplay loop. Although the crafting system was removed in favor of a simplified production process for snappier gameplay, designing and implementing the original crafting system was one of my favorite parts of creating Rent-A-Bot.</p>
+									<p>Gameplay-wise, crafting was very straightforward. Players could place up to 3 ingredients in a Fabricator and then activate it to create a new object based on the input materials. Surprisingly, despite the simplicity of the feature implementing it proved to be a bit of a puzzle. Nonetheless, it was a welcome challenge that expanded my capabilities as a developer. This was my first time creating a crafting system, and I had lots of fun figuring out how to make it robust and intuitive to work with.</p>
+								</div>
+
+								<h3 onclick="toggleCollapse('craftingImplementation')" style="cursor: pointer;">Implementation <i class="fas fa-plus"></i></h3>
+								<div id="craftingImplementation" class="collapse">
+									<div class="devblock">
+										<p>Implementing the crafting system boiled down to addressing <b>two core tasks: associating input ingredients with their corresponding recipe</b> (or determining if the input was invalid) and <b>storing the various recipes</b> we'd come up with as developers.</p>
+										<p>I first decided to tackle the issue of matching input ingredients with recipes. I quickly came to the conclusion that a naive solution to this problem would require an absurd number of for loops to iterate over the input ingredients and the available recipes, and I knew that such a model would ultimately be difficult to expand upon or modify. I turned to <b>hashes in order to convert the input combination of ingredients into a key</b> that I could use to quickly find the appropriate output, if one existed. I started by assigning the various resources types in the game a unique identifying <code class="language-csharp">char</code>. Once a player had the ingredients they wanted in the Fabricator and activated the machine, the following code would build a unique key <code class="language-csharp">string</code> based on the input ingredients.</p>
+										<pre class="line-numbers codeblock"><!--
+										--><code class="language-csharp"><!--
+										-->void FabricateIngredients(int playerIdx)
+<!--									-->{
+<!--									-->	// If there's nothing inserted, do nothing
+<!--									-->	if (_filledSlots == 0)
+<!--									-->		return;
+
+<!--									-->	var recipeKeyBuilder = new StringBuilder();
+<!--									-->	for (var i = 0; i < _filledSlots; i++)
+<!--									-->	{
+<!--									-->		recipeKeyBuilder.Append(_insertedResources[i].resourceID);
+<!--									-->	}
+
+<!--									-->	// Sort the key string so that the order of the ingredients doesn't matter
+<!--									-->	var recipeKey = RecipeBook.SortString(recipeKeyBuilder.ToString());
+<!--									-->	/* followed by recipe matching and object output logic */
+<!--									-->	/* ... ... ... ... ... ... ... ... ... ... ... ... ... */
+<!--									-->	/* ... ... ... ... ... ... ... ... ... ... ... ... ... */
+<!--									-->}<!--
+										--></code><!--
+									--></pre>
+										
+										<p>The function then <b>uses the generated recipe key</b> with the <code class="language-csharp">TryGetValue</code> function to <b>check the dictionary of recipes</b> if the input belongs to a valid recipe and what that combination yields if it is indeed valid. This leads me to the <b>Recipe Book</b> itself. I knew that I needed an easy way for the Fabricators to access the dictionary of recipes, and I also knew that this "Recipe Book" should allow other the other developers on my team to quickly and <b>easily add, remove, and modify recipes.</b></p>
+									</div>
+
+									<div class="devblock">
+										<span class="image right"><img src="images/RecipeBookPanel.png" alt="" /></span>
+										<p>I ended up making a RecipeBook class and helper Recipe and Ingredient classes to fulfill these exact needs. I made the script a MonoBehaviour component I could place on an object instead of a static script because I wanted to be able to see, add, remove, and modify recipes visually through the Unity Editor, and I didn't have the time budget to create custom editor tools for that purpose. Developers could define new recipes with the RecipeBook script, and at runtime it'd automatically generate a dictionary containing those recipes.</p>
+									</div>
+									
+									<pre class="line-numbers codeblock"><!--
+										--><code class="language-csharp"><!--
+										-->void Awake()
+<!--									-->{
+<!--									-->	/* Initialization code */
+
+<!--									-->	// Generate dictionary of recipes at runtime
+<!--									-->	foreach (var recipe in recipeList)
+<!--									-->	{
+<!--									-->		StringBuilder recipeKeyBuilder = new();
+
+<!--									-->	/* For each ingredient in recipe append the ingredient's resourceID (char)
+<!--									-->	   to the recipeKeyBuilder the number of times specified by the ingredient's quantity */
+<!--									-->		foreach (var ingredient in recipe.ingredientsList)
+<!--									-->		{
+<!--									-->			recipeKeyBuilder.Append(new string(ingredient.ingredientPrefab
+<!--									-->			.GetComponent&lt;Resource&gt;().resourceID,
+<!--									-->			ingredient.ingredientQuantity));
+<!--									-->		}
+										
+<!--									-->	var recipeKey = SortString(recipeKeyBuilder.ToString());
+<!--									-->	RecipeMap.Add(recipeKey, recipe.outputPrefab);
+<!--									-->	}
+<!--									-->}<!--
+										--></code><!--
+									--></pre>
+									<div class="devblock">
+										<p>With these core pieces of functionality powering the Fabricator and the RecipeBook, we had ourselves a flexible crafting system where, as a developer, you could easily add, modify, and remove recipes as you pleased. The system was also invariant to external changes concerning the resources used in the recipes. For example, if you were to alter the resourceID for a particular resource, the RecipeBook would use the new <code>char</code> the next time you hit play, since it dynamically regenerated the RecipeBook's dictionary at runtime. Overall, this was one of the more fun and satisfying things I worked on during the development of Rent-A-Bot.</p>
+									</div>
+								</div>
+							</div>
+							
+							<h2 id="two">Designing Quick Time Events: Function <em>and</em> Form</h2>
+							<div>
+								<div class="devblock">
+									<span class="image right"><img src="images/rent-a-bot-qte.gif" alt="" /></span>
+									<p>Disasters are at the heart of what makes Rent-A-Bot so chaotic and fun and what truly sets it apart from other similar games like Overcooked. Over the course of the game's development, we worked to put the Disasters in the spotlight, but making them such a central part of the game required us to flesh them out and make them worth the players' time and attention.</p>
+									<p>Drawing inspiration from single-player games like Arkham Asylum, Spider-Man 2, and Skyrim, I designed a variety of unique quick time events the player would have to complete in order to fix the various Disasters they might encounter throughout the course of a level. These include a rhythm-based button-tapping QTE to revive a Disabled Generator, a controller trigger-based QTE to repair Bust Pipes, and a joystick QTE to fix Conveyor Belt Jams. In the 'Implementation' and 'Design Process' sections below, I dive deeper into how implemented and came up with my personal favorite QTE, the Joystick QTE.</p>
+								</div>
+
+								<h3 onclick="toggleCollapse('qteImplementation')" style="cursor: pointer;">Implementation <i class="fas fa-plus"></i></h3>
+								<div id="qteImplementation" class="collapse">
+									<div class="devblock">
+										<span class="image left"><img src="images/joystick-visual-prototype.gif" alt="" /></span>
+										<p>The first thing I did was whip up some suitable visuals for the joysticks and hook them up to the actual joystick inputs with some C# scripting. A big part of making a good QTE is providing solid visual feedback, because players need to be able to quickly identify what it is they're being prompted to do. At this stage, I wanted to make sure the visuals were easy on the eyes, responsive, and clearly representative of the player's actions before moving onto the actual logic of the puzzle-aspect of the QTE. I wrote the following code to match the onscreen joysticks to the player's joystick inputs.</p>
+									</div>
+									
+									<pre class="line-numbers codeblock"><!--
+									--><code class="language-csharp"><!--
+									-->void Update()
+<!--								-->{
+<!--								-->	_currAngleLeftStick = _playerInteraction.GetLeftStickPosition();
+<!--								-->	_currAngleRightStick = _playerInteraction.GetRightStickPosition();
+										
+<!--								-->	leftStickInner.transform.localPosition = _currAngleLeftStick * innerStickMaxRadius;
+<!--								-->	rightStickInner.transform.localPosition = _currAngleRightStick * innerStickMaxRadius;
+<!--								--> /* ... QTE Puzzle Logic Below ... */
+<!--								-->}<!--
+									--></code><!--
+								--></pre>
+
+									<div class="devblock">
+										<span class="image right"><img src="images/rent-a-bot-joystick-finalized.gif" alt="" /></span>
+										<p>Next, I added the underlying puzzle logic. The QTE has a target angle for each joystick which it randomly sets each time it's instantiated. It utilizes rumble as its primary means of player feedback. When a player moves a joystick through its target angle, that side of the controller rumbles. When held there, it maintains the rumble at 50% intensity. When both joysticks are within the target zone, the rumble bumps up to max intensity.</p>
+										<p>I ended up adding some slight visual feedback in the final iteration of the QTE (see the Inspiration and Design section below). I kept the visual feedback subtle and had it mirror the rumble feedback. When a player moves a joystick over its target angle, the onscreen joystick flashes briefly. When both are in range, the whole visual fades to white.</p>
+										<p>The full code implementation for this QTE, complete with the logic for rumble and visual feedback, as well as disaster resolution, is best viewed <a href="https://github.com/dgeorgi/p3/blob/main/p3/Assets/Scripts/r_scripts/UI%20Scripts/QuickTimeJoystickMatchHandler.cs">on the script itself within the project's GitHub repo.</a> The relevant code is contained in the script's <code class="language-csharp">Update()</code> function.</p>
+									</div>
+								</div>
+
+								<h3 onclick="toggleCollapse('qteProcess')" style="cursor: pointer;">Inspiration and Design Process <i class="fas fa-plus"></i></h3>
+								<div id="qteProcess" class="collapse">
+									<div class="devblock">
+										<p>As with all the other quick time events in the game, designing the Joystick QTE for the Conveyor Belt Jam involved asking myself what situation I wanted to simulate with the QTE. For example, with the Power Generator Disaster, where players have to restart a disabled Power Generator, I created a rhythm-based button-tapping QTE to evoke the feeling of pulling on a generator's cord to start it up. For the Conveyor Belt Jam, I wanted players to feel like they were twisting and turning a screwdriver to get loose parts into place, so I immediately thought to make a joystick based QTE. </p>
+									</div>
+									
+									<div class="devblock">
+										<span class="image left"><img src="https://gamingpastime.com/wp-content/uploads/2019/12/batmanaa6.jpg" alt="" /></span>
+										<p>I wanted players to do more than just spin the joysticks around, as I felt that would be both unsatisfying and potentially inaccessible for certain players. That's when I thought back to two of my personal favorite QTEs: the Cryptographic Sequencer QTE from the Arkham games and the safe-cracking QTE from The Last of Us. </p>
+										<p>The Arkham QTE has players probe around with both joysticks in order to match a certain target frequency and amplitude. I always felt that the self-contained puzzle-like nature of this QTE always left me with a great sense of satisfaction whenever I completed it. Drawing from this, I made the primary objective of the Conveyor Jam QTE to properly align both joysticks at certain (randomized) target angles.</p>
+									</div>
+									
+									<div class="devblock"><span class="image right"><img src="#" alt=""/></span>
+										<p>In order to set Rent-A-Bot's Joystick QTE apart from the one found in the Arkham series, I looked to The Last of Us' safe-cracking QTE, where the player has to detect minute differences in haptic feedback to crack the code to the safe; like TLOU, I utilized rumble on the controllers to provide haptic feedback to the players when a certain joystick was within its target zone. If the right joystick was in range, the right side of the controller would rumble slightly, and the same was true for the left side. When both sticks were in range, the controller would rumble at maximum intensity. This resulted in a juicy, satisfying miniature puzzle of a QTE. However, there were still certain players' whose first instinct was to rapidly spin both joysticks. I found that the existing player guidance simply wasn't always enough to convey the objective of this QTE. As a result, I ended up adding a slight visual cue as a redundancy. In the final version of the QTE, whenever a stick passes over its target zone, the corresponding on-screen visual for the joystick flashes white. When both sticks are aligned, they smoothly increase in brightness as the player holds the sticks in place for the requisite amount of time.</p>
+									</div>
+								</div>
+							</div>
+
+							<!--<h2 id="three">Bonus - The Art of Rent-A-Bot</h2>
+							<div class="devblock">
+								<span class="image left"><img src="images/bossman.png" alt="" /></span>
+								<p>As we perfected Rent-A-Bot's gameplay loop, we found the game still lacked a unique identity. At the same time, we faced another, seemingly unrelated issue. Players were progressing through our tutorial without so much as glancing at the text provided to help them learn the game, leaving them frustrated, confused, and stuck on what to do. When we decided it'd be necessary to overhaul the tutorial, I quickly sketched up and pitched the idea of adding a foreman-type character to help guide the players through the updated tutorial. Enter Bossman.</p>
+								<p>The Bossman character quickly took on an identity of his own and became the public face of the game. One of our two posters at the UM + EMU Games Showcase prominently featured the character and one of the game's developers actually dressed up as the character on the showcase floor. Most significantly, besides being the player's guide through the tutorial, he ended up the star and voice of the Rent-A-Bot trailer. He might be the most recognizable piece of art to emerge from the Rent-A-Bot, but a lot more art was created for both in-game and marketing visuals. Here, I'll be listing the most fun and interesting bits of art I contributed to the game, as well as the rationale behind their designs.</p>
+							</div>-->
+						</div>
+					</section>
+			</div>
+
+		<!-- Footer -->
+			<footer id="footer" class="wrapper alt">
+				<div class="inner">
+					<ul class="menu">
+						<li>&copy; Untitled. All rights reserved.</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li>
+					</ul>
+				</div>
+			</footer>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+			<script src="prism/prism.js"></script>
+			<script>
+				function toggleCollapse(collapsibleId) {
+					let content = document.getElementById(collapsibleId);
+					// Assuming this function is always called by clicking on an h2 or h3 that directly encloses the i element
+					let icon = event.currentTarget.querySelector('i');
+
+					if (content.style.display === "block") {
+						content.style.display = "none";
+						if (icon) {
+							icon.classList.remove('fa-minus');
+							icon.classList.add('fa-plus');
+						}
+					} else {
+						content.style.display = "block";
+						if (icon) {
+							icon.classList.remove('fa-plus');
+							icon.classList.add('fa-minus');
+						}
+					}
+					Prism.highlightAll();
+				}
+			</script>
+			<script>
+				document.addEventListener('DOMContentLoaded', function() {
+					let collapsibleTriggers = document.querySelectorAll('.collapsible-trigger');
+
+					collapsibleTriggers.forEach(function(trigger) {
+						// Set the initial state correctly
+						let content = trigger.nextElementSibling;
+						while(content && !content.classList.contains('collapsible-content')) {
+							content = content.nextElementSibling;
+						}
+						if (content) {
+							content.style.maxHeight = content.classList.contains('active') ? `${content.scrollHeight}px` : "0px";
+						}
+
+						trigger.addEventListener('click', function() {
+							// Toggle the content
+							content = this.nextElementSibling;
+							while(content && !content.classList.contains('collapsible-content')) {
+								content = content.nextElementSibling;
+							}
+							if (content) {
+								content.classList.toggle('active');
+								content.style.maxHeight = content.classList.contains('active') ? `${content.scrollHeight}px` : "0px";
+
+								// Toggle the caret icon
+								let icon = this.querySelector('.fa');
+								if (icon) {
+									icon.classList.toggle('fa-caret-down');
+									icon.classList.toggle('fa-caret-up'); // Assuming you have a 'fa-caret-up' class for the upward caret
+								}
+							}
+						});
+					});
+				});
+			</script>
+		
+			<script>
+				// Array of images you want to rotate
+				const images = [
+					'images/rent-a-bot-1.png',
+					'images/rent-a-bot-2.png',
+					'images/rent-a-bot-3.png',
+					'images/rent-a-bot-4.png',
+				];
+				// Current index of the images array
+				let currentIndex = 0;
+
+				// Function to rotate images
+				function rotateImage() {
+					currentIndex = (currentIndex + 1) % images.length; // Increment the index and loop back to 0 if it reaches the end
+					document.getElementById('title-image').src = images[currentIndex]; // Change the image source
+				}
+
+				// Set the interval to change the image every 5.5 seconds (5500 milliseconds)
+				setInterval(rotateImage, 5500);
+			</script>
+	</body>
+</html>
