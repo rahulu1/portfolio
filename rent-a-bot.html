@@ -126,7 +126,20 @@
 										<p>With these core pieces of functionality powering the Fabricator and the RecipeBook, we had ourselves a flexible crafting system where, as a developer, you could easily add, modify, and remove recipes as you pleased. The system was also invariant to external changes concerning the resources used in the recipes. For example, if you were to alter the resourceID for a particular resource, the RecipeBook would use the new <code>char</code> the next time you hit play, since it dynamically regenerated the RecipeBook's dictionary at runtime. Overall, this was one of the more fun and satisfying things I worked on during the development of Rent-A-Bot.</p>
 									</div>
 								</div>
+
+								<h3 onclick="toggleCollapse('craftingImprovements')" style="cursor: pointer;">Improvements <i class="fas fa-plus"></i></h3>
+								<div id="craftingImprovements" class="collapse">
+									<div class="devblock">
+										<p>While I'm happy with the way the crafting system turned out, I've learned a lot more about the ins and outs of Unity since the project concluded, and I see some major improvements I could've made to my approach to this problem.</p>
+										<p>An issue I have with my initial implementation of the crafting system is how it relies on something akin to a singleton-pattern. I extended the RecipeBook class from the MonoBehaviour class in order to allow for use of the editor to add, remove, and modify recipes.
+											I've since learned about ScriptableObjects in Unity. In a future attempt to implement a crafting system, I'd extend the RecipeBook class from the ScriptableObject class instead and make it a project-wide asset that can be accessed from every scene. This would slightly reduce the
+											complexity and load of each scene by eliminating the need for an invisible RecipeBook object in each level. Additionally, it'd ensure project-wide consistency of the RecipeBook. With a different RecipeBook prefab instance in each scene, it'd be easy for someone
+											working on the project to accidentally make a change on a specific instance rather than the prefab, causing inconsistencies between levels. Using one ScriptableObject for the job prevents that sort of error.</p>
+									</div>
+								</div>
 							</div>
+							
+							
 							
 							<h2 id="two">Designing Quick Time Events: Function <em>and</em> Form</h2>
 							<div>
