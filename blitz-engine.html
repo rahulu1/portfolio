@@ -1,0 +1,223 @@
+<!DOCTYPE HTML>
+<!--
+	Hyperspace by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html lang="en">
+	<head>
+		<title>blitzENGINE</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<link rel="stylesheet" href="prism/prism.css" />
+		<link rel="stylesheet" href="prism/themes/prism-synthwave84.css" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Sidebar/Header -->
+		<section id="sidebar" class="project-sidebar">
+			<div class="inner">
+				<!-- Main Navigation -->
+				<nav>
+					<ul>
+						<li class="home-button"><a href="index.html"><i class="fa fa-home"></i> Home</a></li>
+						<li><a href="#intro" class="scrolly">Overview</a></li>
+						<li><a href="#one" class="scrolly">Lua Scripting</a></li>
+						<li><a href="#two" class="scrolly">SDL Integration</a></li>
+						<li><a href="#three" class="scrolly">Box2D Physics</a></li>
+                        <li><a href="#four" class="scrolly">Extensive Tweening Support</a></li>
+                        <li><a href="#five" class="scrolly">Gold Milestone Showcase</a></li>
+					</ul>
+				</nav>
+			</div>
+		</section>
+
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+				<!-- Main -->
+					<section id="main" class="wrapper">
+						<div class="inner project">
+							<div class="header-container">
+								<h1>blitzENGINE: An Expressive, Performant 2D Game Engine</h1>
+								<!-- <a href="https://bossmanstudios.itch.io/rent-a-bot" class="button itch">View on Itch.io <i class="fab fa-itch-io"></i></a> -->
+							</div>
+                            
+                            <span class="image fit"><img id="title-image" src="images/blitzEN-filled.png" alt="" /></span>
+                        </div>
+                    </section>
+            
+            <section class="wrapper style1 fade-up">
+                <div class="inner">
+                    <h2 id="intro">Overview</h2>
+                    <p>As a 2D game engine, built in C++, with a focus on performance and expressiveness, there's a <em>lot</em> to love about <b>blitzENGINE</b>.</p>
+                    <p>Here are some of its standout features and capabilities:</p>
+                    <div class="features">
+                        <section>
+                            <span class="icon solid major fa-code"></span>
+                            <h3>Native Lua Scripting Support</h3>
+                            <p>With lots of practical experience using a variety of Object Oriented languages in a number of contexts ranging from game development to data analysis, I'm ready to hit the ground running when joining any sort of project.</p>
+                        </section>
+                        <section>
+                            <span class="icon solid major fa-bezier-curve"></span>
+                            <h3>Extensive Tweening API</h3>
+                            <p>Through my current job, as well as personal and academic projects, I've become deeply familiar with <b>Unity</b> and Unreal Engine.
+                            I can quickly prototype new features and debug existing code in both engines with ease.</p>
+                        </section>
+                        <section>
+                            <span class="icon solid major fa-space-shuttle"></span>
+                            <h3>Box2D Physics</h3>
+                            <p>Deeply familiar with the hardware and software needed to develop for AR, VR, and XR. Familiar with a variety of hardware,
+                                ranging from Google Cardboard and the Vive Pro to the Quest Pro and HoloLens. Able to develop XR applications in both Unreal and Unity.</p>
+                        </section>
+                        <section>
+                            <span class="icon solid major fa-gamepad"></span>
+                            <h3>SDL Integration</h3>
+                            <p>Through my coursework at the University of Michigan and my work on games I've helped develop, I've gained a solid understanding of important UI/UX
+                                principles and fundamentals and can design visually appealing, intuitive, and accessible experiences for a variety of end users</p>
+                        </section>
+                    </div>
+                </div>
+            </section>
+
+				<!-- Main Continued -->
+					<section id="main" class="wrapper">
+						<div class="inner project">
+							
+							<h2 id="one">Lua Scripting</h2>
+							<div>
+								<div class="devblock">
+									<p>Using <a href="https://sol2.readthedocs.io/en/latest/"><em>Sol</em></a> as its binding API, <b>blitzENGINE</b> utilizes a component-based architecture, where users can write their own custom game logic and components in Lua.</p>
+                                    <p>Make use of various lifecycle functions, callbacks, a built-in EventBus, and more to create dynamic, powerful components and actors. Developers can also utilize of a growing number of natively-integrated C++ components, provided to make development quicker, iteration easier, and games more performant.</p>
+                                    <p>Here's some example code that comes from a character controller component written in Lua:</p>
+                                    <pre class="line-numbers codeblock"><!--
+                                    --><code class="language-lua"><!--
+                                    -->-- More code above...
+
+<!--                                 -->OnUpdate = function(self)
+
+<!--                                 -->    local curr_delta_time = Time.DeltaTime();
+
+<!--                                 -->    -- Horizontal
+<!--                                 -->    local horizontal_input = 0
+<!--                                 -->    if Input.GetKey("right") then
+<!--                                 -->        horizontal_input = self.speed * curr_delta_time
+<!--                                 -->    end
+
+<!--                                 -->-- More code below...<!--
+                                    --></code><!--
+                                --></pre>
+								</div>
+
+							</div>
+							
+
+							<h2 id="two">SDL Integration</h2>
+							<div>
+								<div class="devblock">
+                                    <p><b>blitzENGINE</b> is built on top of <a href="https://www.libsdl.org/"><em>SDL</em></a>, a cross-platform development library designed to abstract away platform-specific calls for input polling, graphics rendering, audio output, and more.</p>
+                                    <p>Through <a href="https://sol2.readthedocs.io/en/latest/"><em>Sol</em></a>, <b>blitzENGINE's</b> API provides a variety of flexible and powerful ways for developers to directly utilize SDL and its features for themselves, straight through Lua, with the added layer of cohesion and convenience you've come to expect from a game engine.</p>
+                                </div>
+							</div>
+
+
+                            <h2 id="three">Box2D Physics</h2>
+							<div>
+								<div class="devblock">
+									<p>Watch your games spring to life as soon as you add a Rigidbody component into your scenes. Powered by Box2D, <b>blitzENGINE's</b> Physics API and Rigidbody component provide developers with a way to add engaging, performant physics simulations to their games. Create static, dynamic, and kinematic physics bodies with triggers and colliders to create complex interactions between your game's Actors.</p>
+                                    <p><b>bliztENGINE</b> implements a fixed-timestep loop in order to ensure that physics simulations are decoupled from the game's performance on any specific hardware. What does that mean? Whether you're pushing 15 FPS or 150 FPS, physics simulations will play out the same, delivering exceptional accuracy for your games. <b>blitzENGINE</b> utilizes platform-specific code to ensure time is measured as precisely as possible, allowing for the fixed-timestep loop to perform as consistently and accurately as possible across a variety of platforms.</p>
+								</div>
+							</div>
+
+
+							<h2 id="four">Extensive Tweening Support</h2>
+							<div class="devblock">
+								<p><b>blitzENGINE's</b> crowning jewel and most unique feature, make use the engine's wildly expressive tweening API (based off of the incredible <a href="https://dotween.demigiant.com/index.php"><em>DOTween</em></a> plugin for Unity) to take your scripting to the next level. All datatypes with support for basic arithmetic (and some without!) can have their values tweened using a host of different easing functions, loop types, callbacks, and more. Use the wildly powerful GOTween.To function to tween almost <em>any</em> type of value, or use the Tween shortcut functions present on Native <b>blitzENGINE</b> components to write even more concise, readable, and performant code.</p>
+                                <p>Use callbacks, tween chaining, and more to quickly spin up incredibly polished and reactive game elements with very short iteration times. The tweening API is intuitive and expansive enough to script nearly anything you can think with 20% of the code and effort. Let GOTween do the heavy lifting, so you can focus on the creative side of game development and make your games the most unique experiences they can be!</p>
+							</div>
+
+                            <h2 id="five">Gold Milestone Showcase</h2>
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/M4PFe50yudQ?si=lsiwALE28iCZpxWw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+						</div>
+					</section>
+			</div>
+
+		<!-- Footer -->
+			<footer id="footer" class="wrapper alt">
+				<div class="inner">
+					<ul class="menu">
+						<li>&copy; Untitled. All rights reserved.</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li>
+					</ul>
+				</div>
+			</footer>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+			<script src="prism/prism.js"></script>
+			<script>
+				function toggleCollapse(collapsibleId) {
+					let content = document.getElementById(collapsibleId);
+					// Assuming this function is always called by clicking on an h2 or h3 that directly encloses the i element
+					let icon = event.currentTarget.querySelector('i');
+
+					if (content.style.display === "block") {
+						content.style.display = "none";
+						if (icon) {
+							icon.classList.remove('fa-minus');
+							icon.classList.add('fa-plus');
+						}
+					} else {
+						content.style.display = "block";
+						if (icon) {
+							icon.classList.remove('fa-plus');
+							icon.classList.add('fa-minus');
+						}
+					}
+					Prism.highlightAll();
+				}
+			</script>
+			<script>
+				document.addEventListener('DOMContentLoaded', function() {
+					let collapsibleTriggers = document.querySelectorAll('.collapsible-trigger');
+
+					collapsibleTriggers.forEach(function(trigger) {
+						// Set the initial state correctly
+						let content = trigger.nextElementSibling;
+						while(content && !content.classList.contains('collapsible-content')) {
+							content = content.nextElementSibling;
+						}
+						if (content) {
+							content.style.maxHeight = content.classList.contains('active') ? `${content.scrollHeight}px` : "0px";
+						}
+
+						trigger.addEventListener('click', function() {
+							// Toggle the content
+							content = this.nextElementSibling;
+							while(content && !content.classList.contains('collapsible-content')) {
+								content = content.nextElementSibling;
+							}
+							if (content) {
+								content.classList.toggle('active');
+								content.style.maxHeight = content.classList.contains('active') ? `${content.scrollHeight}px` : "0px";
+
+								// Toggle the caret icon
+								let icon = this.querySelector('.fa');
+								if (icon) {
+									icon.classList.toggle('fa-caret-down');
+									icon.classList.toggle('fa-caret-up'); // Assuming you have a 'fa-caret-up' class for the upward caret
+								}
+							}
+						});
+					});
+				});
+			</script>
+	</body>
+</html>
